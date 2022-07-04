@@ -3,7 +3,7 @@
 HDRS  =  globals.h
 SRCS  =  interp.c  scan.c  utils.c  main.c
 OBJS  =  interp.o  scan.o  utils.o  main.o
-CC    =  cc
+CC    =  gcc -O3 -Wall -Wextra
 
 joy:		$(OBJS)
 		$(CC)  $(OBJS)  -o joy

@@ -1,13 +1,20 @@
+/*
+    module  : utils.c
+    version : 1.1.1.1
+    date    : 06/28/22
+*/
 #include <stdio.h>
 #include <time.h>
 #include "globals.h"
 
-// PUBLIC int clock();			/* file time.h		*/
+#define CORRECT_GARBAGE_COLLECTOR
+
+/* PUBLIC int clock(); */		/* file time.h		*/
 PUBLIC void getsym();			/* file scan.c		*/
 PUBLIC void error();
 PUBLIC void execerror();		/* file main.c		*/
 PUBLIC void lookup();
-PUBLIC void exit();			/* file interp.c	*/
+/* PUBLIC void exit(); */		/* file interp.c	*/
 
 static Node
     memory[MEMORYMAX],
@@ -28,7 +35,11 @@ PUBLIC void inimem1()
 PUBLIC void inimem2()
 {
     mem_low = memoryindex;
+#ifdef CORRECT_GARBAGE_COLLECTOR
+    mem_mid = mem_low + (&memory[MEM_HIGH] - mem_low) / 2;
+#else
     mem_mid = mem_low + (MEM_HIGH)/2;
+#endif
     if (tracegc > 1)
       { printf("memory = %ld : %ld\n",
 		(long)memory,MEM2INT(memory));
@@ -132,7 +143,14 @@ PUBLIC Node *newnode(o,l,r)
       { gc1("automatic");
 	if (o == LIST_) l = (long)copy(l);
 	r = copy(r);
+#ifdef CORRECT_GARBAGE_COLLECTOR
+	gc2("automatic");
+	if ((direction == +1 && memoryindex >= mem_mid) ||
+	    (direction == -1 && memoryindex <= mem_mid))
+	    execerror("memory", "copying"); }
+#else
 	gc2("automatic"); }
+#endif
     p = memoryindex;
     memoryindex += direction;
     p->op = o;

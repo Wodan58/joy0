@@ -1,0 +1,7 @@
+(*
+    module  : fib.joy
+    version : 1.1
+    date    : 06/28/22
+*)
+0 __settracegc.
+40 [small] [] [pred dup pred] [+] binrec.

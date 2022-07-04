@@ -1,3 +1,8 @@
+/*
+    module  : main.c
+    version : 1.1
+    date    : 12/12/12
+*/
 /* file: main.c */
 
 #include <stdio.h>

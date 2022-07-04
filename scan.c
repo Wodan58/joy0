@@ -1,3 +1,8 @@
+/*
+    module  : scan.c
+    version : 1.1
+    date    : 12/12/12
+*/
 /* FILE : scan.c */
 #include <stdio.h>
 #include <stdlib.h>

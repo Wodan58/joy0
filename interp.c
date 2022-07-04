@@ -1,3 +1,8 @@
+/*
+    module  : interp.c
+    version : 1.1.1.1
+    date    : 06/28/22
+*/
 /* FILE: interp.c */
 
 #include <stdio.h>
@@ -5,6 +10,8 @@
 #include <stdlib.h>
 #include <time.h>
 #include "globals.h"
+
+/* #define TRACING */
 
 PUBLIC void printnode();		/* file utils.c		*/
 
@@ -135,7 +142,7 @@ PUBLIC char * opername();
    (NODE->op == USR_  ?  NODE->u.ent->name :			\
     opername(NODE->op) ) )
 
-// PUBLIC int clock();			/* file time.h		*/
+/* PUBLIC int clock(); */		/* file time.h		*/
 PUBLIC Node *newnode();			/* file utils.c 	*/
 PUBLIC void memoryindex_();
 PUBLIC void execerror();		/* file main.c		*/
@@ -147,8 +154,8 @@ PUBLIC void writefactor();
 PUBLIC void writeterm();
 PUBLIC void quit_();
 PUBLIC void gc_();
-// PUBLIC  int malloc();		/* in the library	*/
-// PUBLIC void system();
+/* PUBLIC  int malloc(); */		/* in the library	*/
+/* PUBLIC void system(); */
 
 /* - - - -  O P E R A N D S   - - - - */
 
@@ -584,10 +591,11 @@ PRIVATE void opcase_()
 #define CONS_SWONS(PROCEDURE,NAME,AGGR,ELEM)			\
 PRIVATE void PROCEDURE()					\
 {   TWOPARAMS(NAME);						\
+    Node *temp;							\
     switch (AGGR->op)						\
       { case LIST_:						\
-	    BINARY(LIST_,newnode(ELEM->op,			\
-				 ELEM->u.num,AGGR->u.lis));	\
+	    temp = newnode(ELEM->op, ELEM->u.num, AGGR->u.lis);	\
+	    BINARY(LIST_,temp);					\
 	    break;						\
 	case SET_:						\
 	    CHECKSETMEMBER(ELEM,NAME);				\
@@ -846,6 +854,18 @@ HELP(h_help1_,==)
 
 /* - - - - -   C O M B I N A T O R S   - - - - - */
 
+#ifdef TRACING
+PRIVATE void writestack(Node *n)
+{
+    if (n) {
+        writestack(n->next);
+        if (n->next)
+            putchar(' ');
+        writefactor(n);
+    }
+}
+#endif
+
 PUBLIC void exeterm(n)
     Node *n;
 {
@@ -859,6 +879,12 @@ start:
 	  { printf("exeterm1: %ld ",(long)conts->u.lis);
 	    printnode(conts->u.lis); }
 	stepper = conts->u.lis;
+#ifdef TRACING
+        writestack(stk);
+        printf(" : ");
+        writeterm(stepper);
+        putchar('\n');
+#endif
 	conts->u.lis = conts->u.lis->next;
 	switch (stepper->op)
 	  { case BOOLEAN_: case CHAR_: case INTEGER_:
@@ -1625,16 +1651,18 @@ PRIVATE void treestep_()
 }
 PRIVATE void treerecaux()
 {
+    Node *temp;
     if (stk->next->op == LIST_)
-      { NULLARY(LIST_,newnode(ANON_FUNCT_,treerecaux,NULL));
+      { temp = newnode(ANON_FUNCT_,treerecaux,NULL);
+        NULLARY(LIST_,temp);
 	cons_();		/*  D  [[[O] C] ANON_FUNCT_]	*/
 D(	printf("treerecaux: stack = "); )
 D(	writeterm(stk); printf("\n"); )
 	exeterm(stk->u.lis->u.lis->next); }
     else
-      { Node *n = stk;
+      { temp = stk;
 	POP(stk);
-	exeterm(n->u.lis->u.lis); }
+	exeterm(temp->u.lis->u.lis); }
 }
 PRIVATE void treerec_()
 {
@@ -1645,6 +1673,7 @@ D(  printf("deep: stack = "); writeterm(stk); printf("\n"); )
 }
 PRIVATE void genrecaux()
 {
+    Node *temp;
     int result;
 D(  printf("genrecaux: stack = "); )
 D(  writeterm(stk); printf("\n"); )
@@ -1658,7 +1687,8 @@ D(  writeterm(stk); printf("\n"); )
     else
       { exeterm(SAVED1->u.lis->next->next->u.lis); /*	[R1]	*/
 	NULLARY(SAVED1->op,SAVED1->u.lis);
-	NULLARY(LIST_,newnode(ANON_FUNCT_,genrecaux,NULL));
+	temp = newnode(ANON_FUNCT_,genrecaux,NULL);
+	NULLARY(LIST_,temp);
 	cons_();
 	exeterm(SAVED1->u.lis->next->next->next); } /*   [R2]	*/
     POP(dump);
@@ -1672,6 +1702,7 @@ PRIVATE void genrec_()
 }
 PRIVATE void treegenrecaux()
 {
+    Node *temp;
 D(  printf("treegenrecaux: stack = "); )
 D(  writeterm(stk); printf("\n"); )
     if (stk->next->op == LIST_)
@@ -1680,13 +1711,14 @@ D(  writeterm(stk); printf("\n"); )
 	exeterm(SAVED1->u.lis->next->u.lis);	/*	[O2]	*/
 	NULLARY(SAVED1->op,SAVED1->u.num);
 	POP(dump);				/*   end DIP	*/
-	NULLARY(LIST_,newnode(ANON_FUNCT_,treegenrecaux,NULL));
+	temp = newnode(ANON_FUNCT_,treegenrecaux,NULL);
+	NULLARY(LIST_,temp);
 	cons_();
 	exeterm(stk->u.lis->u.lis->next->next); } /*	[C]	*/
     else
-      { Node *n = stk;
+      { temp = stk;
 	POP(stk);
-	exeterm(n->u.lis->u.lis); }		/*	[O1]	*/
+	exeterm(temp->u.lis->u.lis); }		/*	[O1]	*/
 }
 PRIVATE void treegenrec_()
 {					/* T [O1] [O2] [C]	*/

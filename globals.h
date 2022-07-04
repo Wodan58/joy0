@@ -1,3 +1,8 @@
+/*
+    module  : globals.h
+    version : 1.1
+    date    : 12/12/12
+*/
 /* FILE : globals.h */
 
 				/* configure			*/

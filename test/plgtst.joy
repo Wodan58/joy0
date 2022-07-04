@@ -1,0 +1,164 @@
+(*
+    module  : %M%
+    version : %I%
+    date    : %G%
+*)
+DEFINE
+putchars == [putch] step;
+nl == '\n putch;
+swoncat == swap concat;
+shunt == [swons] step;
+sequand == [pop false] ifte;
+second == rest first;
+s == swoncat;
+r-show == Rev2Tre taut-show-all;
+prs-trace == pop;
+p-show == Pol2Tre taut-show-all;
+m-test == Min2Tre taut-test;
+m-show1 == Min2Tre taut-show-first;
+m-show == Min2Tre taut-show-all;
+m-count == Min2Tre taut-count;
+m-collect1 == Min2Tre taut-collect-first;
+m-collect == Min2Tre taut-collect-all;
+fib == [1 0] dip [swap [+] unary] times popd;
+fact == [[pop null] [[pop 1] dip] [[dup pred] dip i [*] dip] ifte];
+dipd == [dip] cons dip;
+big-formula == [[CEO-sells-shares imp insider-trading and traders-conspire]
+and [i-trade-exposed imp CEO-resigns or CEO-is-sacked] and [CEO-resigns imp
+i-trade-exposed and shares-drop] and [traders-conspire and CEO-is-sacked imp
+sales-drop] and [sales-drop imp CEO-is-sacked and shares-drop] imp [
+CEO-sells-shares imp shares-drop]];
+show-first == pop "\tnot tautology, first countermodel:\n" putchars swap '\t
+              putch "T: " putchars put "  F: " putchars put nl succ;
+show-all == pop [[dup null] ["\tnot tautology, countermodel(s):\n" putchars]
+            [] ifte "  " putchars succ dup put] dipd swap '\t putch "T: "
+            putchars put "  F: " putchars put nl;
+found == pop pop pop not;
+count == pop pop pop succ;
+collect == pop [] cons cons swons;
+ver-first == [pop pop pop pop null] ["ver-first B" t-trace unswons
+[[[[or v A] in] pop [[] cons cons cons dup] dip uncons first [swap [[i] dip
+                ver-first] dip] dip [i] dip ver-first]
+[[[imp > C] in] pop [[] cons cons cons dup] dip uncons first [swap [[i] dip
+                fal-first] dip] dip [i] dip ver-first]
+[[[iff = E] in] pop [[] cons cons cons dup] dip dup [[and] swoncat] dip [or]
+                swoncat [swap [[i] dip ver-first] dip] dip [i] dip fal-first]
+[[[and & K] in] pop uncons first swap [[ver-first] cons swons] dip ver-first]
+[[[not - N] in] pop first fal-first] [popd [has] [pop pop pop pop] [swap
+                [swapd [has] [pop] [swons] ifte swap] dip unswons i] ifte]]
+cond "ver-first E" t-trace] [pop pop pop pop] ifte;
+ver-all == "ver-all B" t-trace unswons
+[[[[or v A] in] pop [[] cons cons cons dup] dip uncons first [swap [[i] dip
+                ver-all] dip] dip [i] dip ver-all]
+[[[imp > C] in] pop [[] cons cons cons dup] dip uncons first [swap [[i] dip
+                fal-all] dip] dip [i] dip ver-all]
+[[[iff = E] in] pop [[] cons cons cons dup] dip dup [[and] swoncat] dip [or]
+                swoncat [swap [[i] dip ver-all] dip] dip [i] dip fal-all]
+[[[and & K] in] pop uncons first swap [[ver-all] cons swons] dip ver-all]
+[[[not - N] in] pop first fal-all] [popd [has] [pop pop pop pop] [swap [swapd
+                [has] [pop] [swons] ifte swap] dip unswons i] ifte]]
+cond "ver-all E" t-trace;
+taut-test == [false [] [] [[found]]] dip fal-first not;
+taut-show-first == [0 [] [] [[show-first]]] dip fal-first [null]
+                   ['\t putch "tautology\n" putchars] [] ifte pop;
+taut-show-all == [0 [] [] [[show-all]]] dip fal-all [null] ['\t
+                 putch "tautology\n" putchars] [] ifte pop;
+taut-count == [0 [] [] [[count]]] dip fal-all;
+taut-collect-first == [[] [] [] [[collect]]] dip fal-first;
+taut-collect-all == [[] [] [] [[collect]]] dip fal-all;
+t-trace == pop;
+fal-first == [pop pop pop pop null] ["fal-first B" t-trace unswons
+[[[[and & K] in] pop [[] cons cons cons dup] dip uncons first [swap
+                 [[i] dip fal-first] dip] dip [i] dip fal-first]
+[[[iff = E] in] pop [[] cons cons cons dup] dip dup [[imp] swoncat]
+                dip [swap] infra [imp] swoncat [swap [[i] dip fal-first]
+                dip] dip [i] dip fal-first]
+[[[or v A] in] pop uncons first swap [[fal-first] cons swons] dip fal-first]
+[[[imp > C] in] pop uncons first swap [[fal-first] cons swons] dip ver-first]
+[[[not - N] in] pop first ver-first] [popd [popd popd has] [pop pop pop pop]
+                [swap [[has] [pop] [swons] ifte] dip unswons i] ifte]]
+cond "fal-first E" t-trace] [pop pop pop pop] ifte;
+fal-all == "fal-all B" t-trace unswons
+[[[[and & K] in] pop [[] cons cons cons dup] dip uncons first [swap [[i] dip
+                 fal-all] dip] dip [i] dip fal-all] [[[or v A] in] pop uncons
+                 first swap [[fal-all] cons swons] dip fal-all]
+[[[imp > C] in] pop uncons first swap [[fal-all] cons swons] dip ver-all]
+[[[iff = E] in] pop [[] cons cons cons dup] dip dup [[imp] swoncat] dip [swap]
+                infra [imp] swoncat [swap [[i] dip fal-all] dip] dip [i] dip
+                fal-all]
+[[[not - N] in] pop first ver-all] [popd [popd popd has] [pop pop pop pop]
+                [swap [[has] [pop] [swons] ifte] dip unswons i] ifte]]
+cond "fal-all E" t-trace;
+R2T == [[[[unops in] [[] cons] dip swons]
+         [[binops in] [[] cons cons] dip swons]
+         [[list] [] cons [QUOTE] swoncat] [[] cons]] cond] step;
+P2T == unswons [[[unops in] [P2T [] cons] dip swons]
+                [[binops in] [P2T [] cons [P2T [] cons] dip swoncat] dip swons]
+                [[list] [] cons [QUOTE] swoncat] [[] cons]] cond;
+Rev2Tre == R2T;
+Pol2Tre == P2T popd;
+Min2Tre == unswons M12T popd;
+M42T == [[[unops in] [unswons M42T [] cons] dip swons]
+        [[[QUOTE] in] [unswons [] cons] dip swons]
+         [[list] unswons M12T popd] [[] cons]] cond;
+M32T == M42T [pop [null not] [first bin3ops in] sequand] [swap
+uncons swapd unswons M32T rollupd [] cons cons cons] [] ifte;
+M22T == M32T [pop [null not] [first bin2ops in] sequand] [swap
+uncons swapd unswons M22T rollupd [] cons cons cons] [] ifte;
+M12T == M22T [pop [null not] [first bin1ops in] sequand] [swap
+uncons swapd unswons M12T rollupd [] cons cons cons] [] ifte;
+unops == [not - N];
+binops == [imp > C  iff = E  or v A  and & K];
+bin1ops == [imp > C   iff = E];
+bin2ops == [or v A];
+bin3ops == [and & K].
+
+0 __settracegc.
+"\ntesting the propositional logic library in file  plglib.joy\n\n" putchars.
+[raining or not raining] m-show.
+[raining or not windy] m-show.
+[[p and q] imp [p or q]] m-show.
+[[p or q] imp [p and q]] m-show.
+[p and q imp p or q] m-show.
+[p or q imp p and q] m-show.
+[p and q and r imp p or r or q] m-show.
+[p and q and r iff p or r or q] m-show.
+[p & q & r & s > p v r v q v s] m-show.
+[p & q & r & s = p v r v q v s] m-show.
+[- p & - q > - [p v q]] m-show.
+[- p v - p > - [p v q]] m-show.
+[p > q > r > p & q & r] m-show.
+[p > q > r > p & q & s] m-show.
+[[[p > q] > p] > p] m-show.
+[[[p > q] > q] > p] m-show.
+[[p & q v p & r] = p & [q v r]] m-show.
+[[p & q v p & r] = q & [p v r]] m-show.
+[[p v q] & [p > r] & [q > s] > [r v s]] m-show.
+[[p v q] & [p > r] & [q > s] > [r & s]] m-show.
+[A p N p] p-show.
+[A p N q] p-show.
+[C C p q C N q N p] p-show.
+[C C p q C N p N q] p-show.
+[C K K A p q C p r C q s A r s] p-show.
+[C K K A p q C p r C q s K r s] p-show.
+[imp and imp p q imp q r imp p r] p-show.
+[imp and imp p q imp p r imp q r] p-show.
+[> v p & q r & v p q v p r] p-show.
+[> v p & q r v & p q & p r] p-show.
+[p not q not and r imp q p or not and r imp] r-show.
+[p not q not and r imp q p and not and r imp] r-show.
+[p & q & r > p v q v r] m-show.
+[p v q v r > p & q & r] m-show.
+[p v q v r > p & q & r] m-show1.
+[[p > q] & [q > s] > [p > s]] m-collect.
+[[p > q] & [q > s] > [s > p]] m-collect.
+[[p > q] & [q > s] > [s > p]] m-collect1.
+[[p > q] & [r > s] > [[p & r] > [q v s]]] m-count.
+[[p > q] & [r > s] > [[p v r] > [q & s]]] m-count.
+[[p > q] & [r > s] > [[p v r] > [q & s]]] m-show.
+[[p & q & r] > [p = q = r]] m-test.
+[[p = q = r] > [p & q & r]] m-test.
+[[p = q = r] > [p v q v r]] m-test.
+[[p v q v r] > [p = q = r]] m-test.
+big-formula m-test.
+big-formula m-show.
