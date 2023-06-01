@@ -1,0 +1,7 @@
+(*
+    module  : not.joy
+    version : 1.4
+    date    : 05/23/23
+*)
+true not false =.
+false not.

@@ -1,0 +1,8 @@
+(*
+    module  : body.joy
+    version : 1.2
+    date    : 08/20/22
+*)
+DEFINE	last == dup rest null [first] [rest last] branch.
+
+[last] first body [dup rest null [first] [rest last] branch] equal.

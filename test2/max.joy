@@ -1,0 +1,9 @@
+(*
+    module  : max.joy
+    version : 1.4
+    date    : 05/23/23
+*)
+'A 'B max 'B =.
+'B 'A max 'B =.
+1 2 max 2 =.
+2 1 max 2 =.

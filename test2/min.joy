@@ -1,0 +1,9 @@
+(*
+    module  : min.joy
+    version : 1.4
+    date    : 05/23/23
+*)
+'A 'B min 'A =.
+'B 'A min 'A =.
+1 2 min 1 =.
+2 1 min 1 =.

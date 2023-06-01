@@ -1,0 +1,8 @@
+(*
+    module  : rest.joy
+    version : 1.2
+    date    : 08/20/22
+*)
+[1 2 3] rest [2 3] equal.
+"test" rest "est" =.
+{1 2 3} rest {2 3} =.

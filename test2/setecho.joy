@@ -1,0 +1,11 @@
+(*
+    module  : setecho.joy
+    version : 1.2
+    date    : 08/20/22
+*)
+1 setecho.
+echo 1 =.
+2 setecho.
+echo 2 =.
+3 setecho.
+echo 3 =.

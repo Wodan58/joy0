@@ -1,0 +1,9 @@
+(*
+    module  : while.joy
+    version : 1.2
+    date    : 08/20/22
+*)
+DEFINE	prime == 2 [[[dup * >] nullary [rem 0 >] dip and] nullary] [succ]
+	while dup * <.
+
+19 prime.

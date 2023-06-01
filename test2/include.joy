@@ -1,0 +1,10 @@
+(*
+    module  : include.joy
+    version : 1.2
+    date    : 08/20/22
+*)
+DEFINE	_include == true.
+
+["_include" intern body null]
+["include.joy" include] [] ifte.
+_include.

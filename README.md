@@ -13,10 +13,25 @@ Some system header files have been added.
 The return value of newnode needs to be captured in a variable.
 This introduces a sequence point, preventing unspecified behaviour.
 TRACING was used to locate the problem, so it was kept in the source code.
-CORRECT_GARBAGE_COLLECTOR prevents a segfault when processing the faulty
-ack.joy and instead of that prints a runtime error.
+CORRECT_GARBAGE_COLLECTOR prints a runtime error in case of memory overflow.
+Because the garbage collector uses recursion, a stack overflow is possible.
+
+Warning
+-------
+
+The source code assumes that sizeof(long) == sizeof(void *).
 
 Installation
 ------------
 
     make
+
+Testing
+-------
+
+    cd test2
+    for i in *.joy
+    do
+        ../joy <$i >$i.out
+    done
+    grep -l false *.out

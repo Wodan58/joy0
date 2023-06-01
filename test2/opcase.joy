@@ -1,0 +1,21 @@
+(*
+    module  : opcase.joy
+    version : 1.3
+    date    : 05/23/23
+*)
+DEFINE	test == [['A "ischar"]
+		 [pop "ispop"]
+		 [10 "isinteger"]
+		 ["isother"]] opcase i.
+
+'A test "ischar" =.
+10 test "isinteger" =.
+[test] first test "isother" =.
+[pop] first test "ispop" =.
+
+DEFINE	test == [['A "ischar" "ischar"]
+		 [pop "ispop" "ispop"]
+		 [10 "isinteger" "isinteger"]
+		 ["isother" "isother"]] opcase i.
+
+10 test "isinteger" =.

@@ -1,0 +1,15 @@
+(*
+    module  : compare.joy
+    version : 1.4
+    date    : 05/23/23
+*)
+DEFINE 	sum == 0 [+] fold;
+	average == [sum] [size] cleave /.
+
+"test" "test" compare 0 =.
+{1 2 3} {1 2 3} compare 0 =.
+[pop] first [pop] first compare 0 =.
+[sum] first [sum] first compare 0 =.
+true true compare 0 =.
+'A 'A compare 0 =.
+10 10 compare 0 =.

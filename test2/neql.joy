@@ -1,0 +1,13 @@
+(*
+    module  : neql.joy
+    version : 1.3
+    date    : 05/23/23
+*)
+10 11 !=.
+10 10 != false =.
+10 9 !=.
+"ustu" "test" !=.
+[ustu] first "test" !=.
+[ustu] first [test] first !=.
+"ustu" [test] first !=.
+[ustu] first "test" !=.

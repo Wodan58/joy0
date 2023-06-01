@@ -1,5 +1,10 @@
 *.o
-joy
+t.*
+joy.*
 *.out
 *.new
 SCCS
+lib
+test
+test0
+test1

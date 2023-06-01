@@ -1,7 +1,7 @@
 /*
     module  : interp.c
-    version : 1.1.1.1
-    date    : 06/28/22
+    version : 1.1.1.2
+    date    : 06/01/23
 */
 /* FILE: interp.c */
 
@@ -822,7 +822,7 @@ TYPE(leaf_,"leaf",!=,LIST_)
 TYPE(user_,"user",==,USR_)
 
 #define USETOP(PROCEDURE,NAME,TYPE,BODY)					\
-    PRIVATE void PROCEDURE()						\
+    PRIVATE void PROCEDURE()					\
     { ONEPARAM(NAME); TYPE(NAME); BODY; POP(stk); }
 USETOP( put_,"put",ONEPARAM, writefactor(stk);printf(" "))
 USETOP( putch_,"putch",NUMERICTYPE, printf("%c", (char) stk->u.num) )
@@ -1264,7 +1264,7 @@ PRIVATE void filter_()
 		exeterm(SAVED1->u.lis);
 D(		printf("filter: "); writefactor(stk); printf("\n"); )
 		if (stk->u.num)				/* test */
-		    if (DMP2 == NULL)		/* first */
+		    if (DMP2 == NULL)			/* first */
 		      { DMP2 =
 			    newnode(DMP1->op,
 				DMP1->u.num,NULL);
@@ -1327,7 +1327,7 @@ PRIVATE void split_()
 		exeterm(SAVED1->u.lis);
 D(		printf("split: "); writefactor(stk); printf("\n"); )
 		if (stk->u.num)				/* pass */
-		    if (DMP2 == NULL)		/* first */
+		    if (DMP2 == NULL)			/* first */
 		      { DMP2 =
 			    newnode(DMP1->op,
 				DMP1->u.num,NULL);
@@ -1338,7 +1338,7 @@ D(		printf("split: "); writefactor(stk); printf("\n"); )
 				DMP1->u.num,NULL);
 			DMP3 = DMP3->next; }
 		else					/* fail */
-		    if (DMP4 == NULL)		/* first */
+		    if (DMP4 == NULL)			/* first */
 		      { DMP4 =
 			    newnode(DMP1->op,
 				DMP1->u.num,NULL);
@@ -1387,14 +1387,14 @@ PRIVATE void PROCEDURE()					\
 	    break; }						\
 	case LIST_ :						\
 	  { dump1 = newnode(LIST_,SAVED2->u.lis,dump1);		\
-	    while (DMP1 != NULL && result == INITIAL)	\
-	      { stk = newnode(DMP1->op,			\
-			DMP1->u.num,SAVED3);		\
+	    while (DMP1 != NULL && result == INITIAL)		\
+	      { stk = newnode(DMP1->op,				\
+			DMP1->u.num,SAVED3);			\
 		exeterm(SAVED1->u.lis);				\
 		if (stk->u.num != INITIAL)			\
 		     result = 1 - INITIAL; 			\
-		DMP1 = DMP1->next; }		\
-	    POP(dump1);				\
+		DMP1 = DMP1->next; }				\
+	    POP(dump1);						\
 	    break; }						\
 	default :						\
 	    BADAGGREGATE(NAME); }				\
@@ -1807,7 +1807,7 @@ static struct {char *name; void (*proc) (); char *messg1, *messg2;}
 {"autoput",		autoput_,	"->  I",
 "Pushes current value of flag  for automatic output, I = 0..2."},
 
-{"echo",			echo_,		"->  I",
+{"echo",		echo_,		"->  I",
 "Pushes value of echo flag, I = 0..3."},
 
 {"clock",		clock_,		"->  I",
@@ -1943,7 +1943,7 @@ static struct {char *name; void (*proc) (); char *messg1, *messg2;}
 
 /* PREDICATES */
 
-{"null",			null_,		"X  ->  B",
+{"null",		null_,		"X  ->  B",
 "Tests for empty aggregate X or zero numeric."},
 
 {"small",		small_,		"X  ->  B",
@@ -1979,7 +1979,7 @@ static struct {char *name; void (*proc) (); char *messg1, *messg2;}
 {"integer",		integer_,	"X  ->  B",
 "Tests whether X is an integer."},
 
-{"char",			char_,		"X  ->  B",
+{"char",		char_,		"X  ->  B",
 "Tests whether X is a character."},
 
 {"logical",		logical_,	"X  ->  B",
@@ -1991,7 +1991,7 @@ static struct {char *name; void (*proc) (); char *messg1, *messg2;}
 {"string",		string_,	"X  ->  B",
 "Tests whether X is a string."},
 
-{"list",			list_,		"X  ->  B",
+{"list",		list_,		"X  ->  B",
 "Tests whether X is a list."},
 
 {"leaf",		leaf_,		"X  ->  B",
@@ -2068,7 +2068,7 @@ static struct {char *name; void (*proc) (); char *messg1, *messg2;}
 {"branch",		branch_,	"B [T] [F]  ->  ...",
 "If B is true, then executes T else executes F."},
 
-{"ifte",			ifte_,		"[B] [T] [F]  ->  ...",
+{"ifte",		ifte_,		"[B] [T] [F]  ->  ...",
 "Executes B. If that yields true, then executes T else executes F."},
 
 {"ifinteger",		ifinteger_,	"X [T] [E]  ->  ...",
@@ -2113,10 +2113,10 @@ static struct {char *name; void (*proc) (); char *messg1, *messg2;}
 {"condlinrec",		condlinrec_,	"[ [C1] [C2] .. [D] ]  ->  ...",
 "Each [Ci] is of the forms [[B] [T]] or [[B] [R1] [R2]]. Tries each B. If that yields true and there is just a [T], executes T and exit.  If there are [R1] and [R2], executes R1, recurses, executes R2. Subsequent case are ignored. If no B yields true, then [D] is used. It is of the forms [[T]] or [[R1] [R2]]. For the former, executes T. For the latter executes R1, recurses, executes R2."},
 
-{"step",			step_,		"A  [P]  ->  ...",
+{"step",		step_,		"A  [P]  ->  ...",
 "Sequentially putting members of aggregate A onto stack, executes P for each member of A."},
 
-{"fold",			fold_,		"A  V0  BIN  ->  V1",
+{"fold",		fold_,		"A  V0  BIN  ->  V1",
 "Starting with value V0, sequentially puts members of aggregate A onto stack andcombines with binary operator BIN to finally prodice value V1"},
 
 {"map",			map_,		"A [P]  ->  B",
@@ -2137,7 +2137,7 @@ static struct {char *name; void (*proc) (); char *messg1, *messg2;}
 {"split",		split_,		"A [B]  ->  A1 A2",
 "Uses test B to split aggregate A into sametype aggregates A1 and A2 ."},
 
-{"some",			some_,		"A  [B]  ->  X",
+{"some",		some_,		"A  [B]  ->  X",
 "Applies test B to members of aggregate A, X = true if some pass."},
 
 {"all",			all_,		"A [B]  ->  X",
@@ -2160,7 +2160,7 @@ static struct {char *name; void (*proc) (); char *messg1, *messg2;}
 {"_help",		h_help1_,		"->",
 "Lists all hidden symbols in library and then all hidden inbuilt symbols."},
 
-{"helpdetail",			helpdetail_,		"[ S1  S2  .. ]",
+{"helpdetail",		helpdetail_,		"[ S1  S2  .. ]",
 "Gives brief help on each symbol S in the list."},
 
 {"manual",		o_online_manual_,	"->",
@@ -2169,7 +2169,7 @@ static struct {char *name; void (*proc) (); char *messg1, *messg2;}
 {"__latex_manual",	l_latex_manual_,	"->",
 "Writes this manual of all Joy primitives in Latex to output file."},
 
-{"__settracegc",		settracegc_,	"I  ->",
+{"__settracegc",	settracegc_,	"I  ->",
 "Sets value of flag for tracing garbage collection to I (= 0..5)."},
 
 {"setautoput",		setautoput_,	"I  ->",
@@ -2200,7 +2200,7 @@ static struct {char *name; void (*proc) (); char *messg1, *messg2;}
 "Transfers input to file whose name is \"filnam.ext\". On end-of-file returns to previous input file."},
 
 {"abort",		abortexecution_,	 "->",
-"Aborts execution of current Joy program, returnsto Joy main cycle."},
+"Aborts execution of current Joy program, returns to Joy main cycle."},
 
 {"quit",		quit_,			"->",
 "Exit from Joy."},
@@ -2252,9 +2252,9 @@ PRIVATE void helpdetail_()
 #define HEADER(N,NAME,HEAD)					\
     if (strcmp(N,NAME) == 0)					\
       { printf("\n\n");						\
-        if (latex) printf("\\item[--- \\BX{");				\
+        if (latex) printf("\\item[--- \\BX{");			\
 	printf("%s",HEAD);					\
-	if (latex) printf("} ---] \\verb# #");				\
+	if (latex) printf("} ---] \\verb# #");			\
 	printf("\n\n"); }
 PRIVATE void make_manual(int latex)
 {

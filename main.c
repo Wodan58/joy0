@@ -137,8 +137,14 @@ static int mustinclude = 1;
       { printf("->  %s is not empty:\n",NAME);			\
 	writeterm(D); printf("\n"); }
 
-int main()
+int main(int argc, char *argv[])
 {
+    if (argc == 2) {
+	if (!freopen(argv[1], "r", stdin)) {
+            fprintf(stderr, "failed to open the file '%s'.\n", argv[1]);
+	    exit(1);
+	}
+    }
     printf("JOY  -  compiled at %s on %s \n",__TIME__,__DATE__);
     startclock = clock();
     gc_clock = 0;

@@ -1,0 +1,8 @@
+(*
+    module  : cons.joy
+    version : 1.2
+    date    : 08/20/22
+*)
+1 [2 3] cons [1 2 3] equal.
+'t "est" cons "test" =.
+1 {2 3} cons {1 2 3} =.
