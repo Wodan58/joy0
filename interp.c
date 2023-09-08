@@ -1,6 +1,6 @@
 /*
     module  : interp.c
-    version : 1.1.1.2
+    version : 1.1.1.1
     date    : 06/01/23
 */
 /* FILE: interp.c */
@@ -1743,36 +1743,36 @@ static struct {char *name; void (*proc) (); char *messg1, *messg2;}
 	/* THESE MUST BE DEFINED IN THE ORDER OF THEIR VALUES */
 {
 
-{"__ILLEGAL",		dummy_,			"->",
+{"__ILLEGAL",		dummy_,		"->",
 "internal error, cannot happen - supposedly."},
 
-{"__COPIED",		dummy_,			"->",
+{"__COPIED",		dummy_,		"->",
 "no message ever, used for gc."},
 
-{"__USR",		dummy_,			"usg",
+{"__USR",		dummy_,		"usg",
 "user node."},
 
-{"__ANON_FUNCT",	dummy_,			"->",
+{"__ANON_FUNCT",	dummy_,		"->",
 "op for anonymous function call."},
 
 /* LITERALS */
 
-{" truth value type",		dummy_,		"->  B",
+{" truth value type",	dummy_,		"->  B",
 "The logical type, or the type of truth values. It has just two literals: true and false."},
 
-{" character type",		dummy_,		"->  C",
+{" character type",	dummy_,		"->  C",
 "The type of characters. Literals are written with a single quote. Examples:  'A  '7  ';  and so on. Unix style escapes are allowed."},
 
-{" integer type",		dummy_,		"->  I",
+{" integer type",	dummy_,		"->  I",
 "The type of negative, zero or positive integers. Literals are written in decimal notation. Examples:  -123   0   42."},
 
-{" set type",			dummy_,		"->  {...}",
+{" set type",		dummy_,		"->  {...}",
 "The type of sets of small non-negative integers. The maximum is platform dependent, typically the range is 0..31. Literals are written inside curly braces. Examples:  {}  {0}  {1 3 5}  {19 18 17}."},
 
-{" string type",		dummy_,		"->  \"...\" ",
+{" string type",	dummy_,		"->  \"...\" ",
 "The type of strings of characters. Literals are written inside double quotes. Examples: \"\"  \"A\"  \"hello world\" \"123\". Unix style escapes are accepted."},
 
-{" list type",			dummy_,		"->  [...]",
+{" list type",		dummy_,		"->  [...]",
 "The type of lists of values of any type (including lists), or the type of quoted programs which may contain operators or combinators. Literals of this type are written inside square brackets. Examples: []  [3 512 -7]  [john mary]  ['A 'C ['B]]  [dup *]."},
 
 /* OPERANDS */
@@ -1952,28 +1952,28 @@ static struct {char *name; void (*proc) (); char *messg1, *messg2;}
 {">=",			geql_,		"X Y  ->  B",
 "Either both X and Y are numeric or both are strings or symbols. Tests whether X greater than or equal to Y."},
 
-{">",			greater_,		"X Y  ->  B",
+{">",			greater_,	"X Y  ->  B",
 "Either both X and Y are numeric or both are strings or symbols. Tests whether X greater than Y."},
 
-{"<=",			leql_,			"X Y  ->  B",
+{"<=",			leql_,		"X Y  ->  B",
 "Either both X and Y are numeric or both are strings or symbols. Tests whether X less than or equal to Y."},
 
-{"<",			less_,			"X Y  ->  B",
+{"<",			less_,		"X Y  ->  B",
 "Either both X and Y are numeric or both are strings or symbols. Tests whether X less than Y."},
 
-{"!=",			neql_,			"X Y  ->  B",
+{"!=",			neql_,		"X Y  ->  B",
 "Either both X and Y are numeric or both are strings or symbols. Tests whether X not equal to Y."},
 
-{"=",			eql_,			"X Y  ->  B",
+{"=",			eql_,		"X Y  ->  B",
 "Either both X and Y are numeric or both are strings or symbols. Tests whether X equal to Y."},
 
-{"equal",		equal_,			"T U  ->  B",
+{"equal",		equal_,		"T U  ->  B",
 "(Recursively) tests whether trees T and U are identical."},
 
-{"has",			has_,			"A X  ->  B",
+{"has",			has_,		"A X  ->  B",
 "Tests whether aggregate A has X as a member."},
 
-{"in",			in_,			"X A  ->  B",
+{"in",			in_,		"X A  ->  B",
 "Tests whether X is a member of aggregate A."},
 
 {"integer",		integer_,	"X  ->  B",
@@ -2154,13 +2154,13 @@ static struct {char *name; void (*proc) (); char *messg1, *messg2;}
 
 /* MISCELLANEOUS */
 
-{"help",		help1_,			"->",
+{"help",		help1_,		"->",
 "Lists all defined symmbols, including those from library files. Then lists all primitives of raw Joy."},
 
-{"_help",		h_help1_,		"->",
+{"_help",		h_help1_,	"->",
 "Lists all hidden symbols in library and then all hidden inbuilt symbols."},
 
-{"helpdetail",		helpdetail_,		"[ S1  S2  .. ]",
+{"helpdetail",		helpdetail_,	"[ S1  S2  .. ]",
 "Gives brief help on each symbol S in the list."},
 
 {"manual",		o_online_manual_,	"->",
@@ -2178,7 +2178,7 @@ static struct {char *name; void (*proc) (); char *messg1, *messg2;}
 {"setecho",		setecho_,	"I ->",
 "Sets value of echo flag for listing. I = 0: no echo, 1: echo, 2: with tab, 3: and linenumber."},
 
-{"gc",			gc_,	"->",
+{"gc",			gc_,		"->",
 "Initiates garbage collection."},
 
 {"system",		system_,	"\"command\"  ->",
@@ -2199,10 +2199,10 @@ static struct {char *name; void (*proc) (); char *messg1, *messg2;}
 {"include",		include_,	"\"filnam.ext\"  ->",
 "Transfers input to file whose name is \"filnam.ext\". On end-of-file returns to previous input file."},
 
-{"abort",		abortexecution_,	 "->",
+{"abort",		abortexecution_,"->",
 "Aborts execution of current Joy program, returns to Joy main cycle."},
 
-{"quit",		quit_,			"->",
+{"quit",		quit_,		"->",
 "Exit from Joy."},
 {0, dummy_, "->","->"}
 };
