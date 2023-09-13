@@ -1,7 +1,7 @@
 /*
     module  : scan.c
-    version : 1.1
-    date    : 12/12/12
+    version : 1.1.1.1
+    date    : 09/13/23
 */
 /* FILE : scan.c */
 #include <stdio.h>
@@ -67,13 +67,13 @@ PUBLIC void error(message)
     printf("^\n\t%s\n",message);
     errorcount++;
 }
-PUBLIC int doinclude(filnam)
+PUBLIC void doinclude(filnam)
     char *filnam;
 {
     if (ilevel+1 == INPSTACKMAX)
 	execerror("fewer include files","include");
     if ((infile[ilevel+1] = fopen(filnam,"r")) != NULL)
-	{ ilevel++; return(1); }
+	{ ilevel++; return; }
     execerror("valid file name","include");
 }
 PRIVATE char specialchar()
@@ -151,13 +151,15 @@ D(	    printf("getsym: string = %s\n",string); )
 	  { int sign = 1;
 	    if ( isdigit(ch) ||
 		 ( currentcolumn < linelength &&
-		   isdigit(linbuf[currentcolumn]) ) )
+		   isdigit((int)linbuf[currentcolumn]) ) )
 	      { if (! isdigit(ch)) {sign = -1; getch();}
 		num = 0;
 		do {num = 10 * num + ch - '0'; getch();}
 		    while (isdigit(ch));
 		num *= sign; sym = INTEGER_; return; } }
 	    /* ELSE '-' is not unary minus, fall through */
+	    goto Next;
+Next:
 	default:
 	  { int i = 0;
 	    hashvalue = 0; /* ensure same algorithm in inisymtab */
@@ -166,7 +168,7 @@ D(	    printf("getsym: string = %s\n",string); )
 	      while (isalpha(ch) || isdigit(ch) ||
 		       ch == '=' || ch == '_' || ch == '-');
 	    id[i] = '\0'; hashvalue %= HASHSIZE;
-	    if (isupper(id[1]))
+	    if (isupper((int)id[1]))
 	      { if (strcmp(id,"LIBRA") == 0 || strcmp(id,"DEFINE") == 0)
 		   { sym = LIBRA; return; }
 		if (strcmp(id,"HIDE") == 0)

@@ -1,7 +1,7 @@
 /*
     module  : interp.c
     version : 1.1.1.1
-    date    : 06/01/23
+    date    : 09/13/23
 */
 /* FILE: interp.c */
 
@@ -110,7 +110,7 @@ PUBLIC char * opername();
 #define BADAGGREGATE(NAME)					\
     execerror("aggregate parameter",NAME)
 #define BADDATA(NAME)						\
-    execerror("different type",NAME)
+    do { execerror("different type",NAME); break; } while (0)
 
 #define DMP dump->u.lis
 #define DMP1 dump1->u.lis
@@ -545,7 +545,7 @@ PRIVATE void PROCEDURE()					\
 	    INDEXTOOLARGE(NAME);				\
 	    return; }						\
 	case STRING_:						\
-	    if (strlen(AGGR->u.str) < INDEX->u.num)		\
+	    if (strlen(AGGR->u.str) < (size_t)INDEX->u.num)	\
 		INDEXTOOLARGE(NAME);				\
 	    BINARY(CHAR_,AGGR->u.str[INDEX->u.num]);		\
 	    return;						\
@@ -621,7 +621,7 @@ PRIVATE void drop_()
       { case SET_:
 	  { int i; int result = 0;
 	    for (i = 0; i < SETSIZE; i++)
-	        if (stk->next->u.set & (1 << i))
+		if (stk->next->u.set & (1 << i))
 		  { if (n < 1) result = result | (1 << i);
 		    else n--; }
 	    BINARY(SET_,result);
@@ -647,7 +647,7 @@ PRIVATE void take_()
       { case SET_:
 	  { int i; int result = 0;
 	    for (i = 0; i < SETSIZE; i++)
-	        if (stk->next->u.set & (1 << i))
+		if (stk->next->u.set & (1 << i))
 		  { if (n > 0)
 		      { --n;  result = result | (1 << i); }
 		    else break; }
@@ -821,7 +821,7 @@ TYPE(list_,"list",==,LIST_)
 TYPE(leaf_,"leaf",!=,LIST_)
 TYPE(user_,"user",==,USR_)
 
-#define USETOP(PROCEDURE,NAME,TYPE,BODY)					\
+#define USETOP(PROCEDURE,NAME,TYPE,BODY)			\
     PRIVATE void PROCEDURE()					\
     { ONEPARAM(NAME); TYPE(NAME); BODY; POP(stk); }
 USETOP( put_,"put",ONEPARAM, writefactor(stk);printf(" "))
@@ -858,10 +858,10 @@ HELP(h_help1_,==)
 PRIVATE void writestack(Node *n)
 {
     if (n) {
-        writestack(n->next);
-        if (n->next)
-            putchar(' ');
-        writefactor(n);
+	writestack(n->next);
+	if (n->next)
+	    putchar(' ');
+	writefactor(n);
     }
 }
 #endif
@@ -880,10 +880,10 @@ start:
 	    printnode(conts->u.lis); }
 	stepper = conts->u.lis;
 #ifdef TRACING
-        writestack(stk);
-        printf(" : ");
-        writeterm(stepper);
-        putchar('\n');
+	writestack(stk);
+	printf(" : ");
+	writeterm(stepper);
+	putchar('\n');
 #endif
 	conts->u.lis = conts->u.lis->next;
 	switch (stepper->op)
@@ -909,7 +909,7 @@ D(		writefactor(dump1); )
 		(*(stepper->u.proc))(); break; }
 	if (tracegc > 5)
 	  { printf("exeterm2: %ld ",(long)stepper);
-            printnode(stepper); }
+	    printnode(stepper); }
 /*
 	stepper = stepper->next; }
 */
@@ -1218,7 +1218,7 @@ PRIVATE void cond_()
     PRIVATE void PROCEDURE()					\
     {   TWOPARAMS(NAME);					\
 	TWOQUOTES(NAME);					\
-        SAVESTACK;						\
+	SAVESTACK;						\
 	stk = SAVED3;						\
 	exeterm(stk->op == TYP ? SAVED2->u.lis : SAVED1->u.lis);\
 	POP(dump); }
@@ -1255,7 +1255,7 @@ PRIVATE void filter_()
 	    resultstring[j] = '\0';
 	    stk = newnode(STRING_,resultstring,SAVED3);
 	    break; }
-        case LIST_:
+	case LIST_:
 	  { dump1 = newnode(LIST_,SAVED2->u.lis,dump1);	/* step old */
 	    dump2 = newnode(LIST_,NULL,dump2);		/* head new */
 	    dump3 = newnode(LIST_,NULL,dump3);		/* last new */
@@ -1263,17 +1263,17 @@ PRIVATE void filter_()
 	      { stk = newnode(DMP1->op,DMP1->u.num,SAVED3);
 		exeterm(SAVED1->u.lis);
 D(		printf("filter: "); writefactor(stk); printf("\n"); )
-		if (stk->u.num)				/* test */
-		    if (DMP2 == NULL)			/* first */
+		if (stk->u.num)	{			/* test */
+		    if (DMP2 == NULL)		/* first */
 		      { DMP2 =
 			    newnode(DMP1->op,
 				DMP1->u.num,NULL);
 			DMP3 = DMP2; }
-		    else				/* further */
+		    else {				/* further */
 		      { DMP3->next =
 			    newnode(DMP1->op,
 				DMP1->u.num,NULL);
-			DMP3 = DMP3->next; }
+			DMP3 = DMP3->next; } } }
 		DMP1 = DMP1->next; }
 	    stk = newnode(LIST_,DMP2,SAVED3);
 	    POP(dump3);
@@ -1316,7 +1316,7 @@ PRIVATE void split_()
 	    stk = newnode(STRING_,yesstring,SAVED3);
 	    NULLARY(STRING_,nostring);
 	    break; }
-        case LIST_:
+	case LIST_:
 	  { dump1 = newnode(LIST_,SAVED2->u.lis,dump1);	/* step old */
 	    dump2 = newnode(LIST_,NULL,dump2);		/* head true */
 	    dump3 = newnode(LIST_,NULL,dump3);		/* last true */
@@ -1327,7 +1327,7 @@ PRIVATE void split_()
 		exeterm(SAVED1->u.lis);
 D(		printf("split: "); writefactor(stk); printf("\n"); )
 		if (stk->u.num)				/* pass */
-		    if (DMP2 == NULL)			/* first */
+		    if (DMP2 == NULL)		/* first */
 		      { DMP2 =
 			    newnode(DMP1->op,
 				DMP1->u.num,NULL);
@@ -1338,7 +1338,7 @@ D(		printf("split: "); writefactor(stk); printf("\n"); )
 				DMP1->u.num,NULL);
 			DMP3 = DMP3->next; }
 		else					/* fail */
-		    if (DMP4 == NULL)			/* first */
+		    if (DMP4 == NULL)		/* first */
 		      { DMP4 =
 			    newnode(DMP1->op,
 				DMP1->u.num,NULL);
@@ -1427,7 +1427,7 @@ PRIVATE void primrec_()
 	case SET_:
 	  { int j; long set = SAVED3->u.set;
 	    for (j = 0; j < SETSIZE; j++)
-	        if (set & (1 << j))
+		if (set & (1 << j))
 		  { stk = newnode(INTEGER_,j,stk);
 		    n++; }
 	    break; }
@@ -1454,7 +1454,7 @@ PRIVATE void tailrecaux()
     stk = DMP1; POP(dump1);
     if (result) exeterm(SAVED2->u.lis); else
       { exeterm(SAVED1->u.lis);
-        goto tailrec; }  /* tail recursion optimisation */
+	goto tailrec; }  /* tail recursion optimisation */
 }
 PRIVATE void tailrec_()
 {
@@ -1654,7 +1654,7 @@ PRIVATE void treerecaux()
     Node *temp;
     if (stk->next->op == LIST_)
       { temp = newnode(ANON_FUNCT_,treerecaux,NULL);
-        NULLARY(LIST_,temp);
+	NULLARY(LIST_,temp);
 	cons_();		/*  D  [[[O] C] ANON_FUNCT_]	*/
 D(	printf("treerecaux: stack = "); )
 D(	writeterm(stk); printf("\n"); )
@@ -2200,7 +2200,7 @@ static struct {char *name; void (*proc) (); char *messg1, *messg2;}
 "Transfers input to file whose name is \"filnam.ext\". On end-of-file returns to previous input file."},
 
 {"abort",		abortexecution_,"->",
-"Aborts execution of current Joy program, returns to Joy main cycle."},
+"Aborts execution of current Joy program, returnsto Joy main cycle."},
 
 {"quit",		quit_,		"->",
 "Exit from Joy."},
@@ -2241,7 +2241,7 @@ PRIVATE void helpdetail_()
 	    writeterm(n->u.ent->u.body);
 	    printf("\n"); break; }
 	else
-	    printf("%s        :   %s.\n%s\n",
+	    printf("%s	:   %s.\n%s\n",
 		optable[ (int) n->op].name,
 		optable[ (int) n->op].messg1,
 		optable[ (int) n->op].messg2);
@@ -2252,7 +2252,7 @@ PRIVATE void helpdetail_()
 #define HEADER(N,NAME,HEAD)					\
     if (strcmp(N,NAME) == 0)					\
       { printf("\n\n");						\
-        if (latex) printf("\\item[--- \\BX{");			\
+	if (latex) printf("\\item[--- \\BX{");			\
 	printf("%s",HEAD);					\
 	if (latex) printf("} ---] \\verb# #");			\
 	printf("\n\n"); }

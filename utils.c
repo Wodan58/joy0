@@ -1,7 +1,7 @@
 /*
     module  : utils.c
     version : 1.1.1.1
-    date    : 06/28/22
+    date    : 09/13/23
 */
 #include <stdio.h>
 #include <time.h>
@@ -55,7 +55,7 @@ PUBLIC void inimem2()
 PUBLIC void printnode(p)
     Node *p;
 {
-    printf("%10ld:        %-10s %10ld %10ld\n",
+    printf("%10ld:	%-10s %10ld %10ld\n",
 	MEM2INT(p),
 	symtab[(short) p->op].name,
 	p->op == LIST_ ? MEM2INT(p->u.lis) : p->u.num,
@@ -170,7 +170,7 @@ PUBLIC void readfactor()	/* read a JOY factor		*/
 	    lookup();
 D(	    printf("readfactor: location = %d\n",(long) location); )
 	    if (location < firstlibra)
-	        stk =  newnode(LOC2INT(location),location->u.proc,stk);
+		stk =  newnode(LOC2INT(location),location->u.proc,stk);
 		else stk =  newnode(USR_,location,stk);
 	    return;
 	case INTEGER_: case CHAR_: case STRING_:

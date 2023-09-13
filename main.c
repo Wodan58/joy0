@@ -1,7 +1,7 @@
 /*
     module  : main.c
-    version : 1.1
-    date    : 12/12/12
+    version : 1.1.1.1
+    date    : 09/13/23
 */
 /* file: main.c */
 
@@ -128,7 +128,7 @@ PUBLIC void quit_()
     printf("time:  %ld CPU,  %d gc (= %ld%%)\n",
 	totaltime, gc_clock,
 	totaltime ? (1004*gc_clock)/(10*totaltime) : 0);
-    exit(0);
+    exit(EXIT_SUCCESS);
 }
 static int mustinclude = 1;
 
@@ -139,11 +139,9 @@ static int mustinclude = 1;
 
 int main(int argc, char *argv[])
 {
-    if (argc == 2) {
-	if (!freopen(argv[1], "r", stdin)) {
-            fprintf(stderr, "failed to open the file '%s'.\n", argv[1]);
-	    exit(1);
-	}
+    if (argc == 2 && !freopen(argv[1], "r", stdin)) {
+	fprintf(stderr, "failed to open the file '%s'.\n", argv[1]);
+	exit(EXIT_FAILURE);
     }
     printf("JOY  -  compiled at %s on %s \n",__TIME__,__DATE__);
     startclock = clock();
@@ -161,7 +159,7 @@ D(  printf("starting main loop\n"); )
      { if (mustinclude)
 	  { mustinclude = 0;
 	    if (fopen("usrlib.joy","r"))
-	        doinclude("usrlib.joy"); }
+		doinclude("usrlib.joy"); }
 	getsym();
 	if (sym == LIBRA)
 	  { inimem1();

@@ -1,11 +1,10 @@
 /*
     module  : globals.h
-    version : 1.1
-    date    : 12/12/12
+    version : 1.1.1.1
+    date    : 09/13/23
 */
 /* FILE : globals.h */
 
-				/* configure			*/
 #define SHELLESCAPE	'$'
 #define INPSTACKMAX	10
 #define INPLINEMAX	80
@@ -110,8 +109,8 @@ CLASS Node			/* dynamic memory	*/
     *prog, *stk, *conts,
     *dump, *dump1, *dump2, *dump3, *dump4, *dump5;
 
-#define MEM2INT(n) (((long)n - (long)memory) / sizeof(Node))
-#define INT2MEM(x) ((Node*) ((x + (long)&memory) * sizeof(Node)))
+#define MEM2INT(n) (((long)n - (long)memory) / (long)sizeof(Node))
+#define INT2MEM(x) ((Node *) ((x + (long)&memory) * (long)sizeof(Node)))
 
 /* GOOD REFS:
 	005.133l H4732		A LISP interpreter in C
@@ -120,7 +119,7 @@ CLASS Node			/* dynamic memory	*/
    OTHER DATA TYPES
 	WORD = "ABCD" - up to four chars
 	LIST of SETs of char [S0 S1 S2 S3]
-	        LISTS - binary tree [left right]
+		LISTS - binary tree [left right]
 			" with info [info left right]
 	STRING of 32 chars = 32 * 8 bits = 256 bits = bigset
 	CHAR = 2 HEX
