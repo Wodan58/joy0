@@ -1,7 +1,7 @@
 /*
     module  : utils.c
-    version : 1.1.1.1
-    date    : 09/13/23
+    version : 1.1.1.2
+    date    : 10/02/23
 */
 #include <stdio.h>
 #include <time.h>
@@ -168,7 +168,7 @@ PUBLIC void readfactor()	/* read a JOY factor		*/
     switch (sym)
       { case ATOM:
 	    lookup();
-D(	    printf("readfactor: location = %d\n",(long) location); )
+D(	    printf("readfactor: location = %ld\n",(long) location); )
 	    if (location < firstlibra)
 		stk =  newnode(LOC2INT(location),location->u.proc,stk);
 		else stk =  newnode(USR_,location,stk);
@@ -225,7 +225,11 @@ PUBLIC void writefactor(n)
     Node *n;
 {
     if (n == NULL)
+#ifdef DEBUG
+	return;
+#else
 	execerror("non-empty stack","print");
+#endif
     switch (n->op)
       { case BOOLEAN_:
 	    printf("%s", n->u.num ? "true" : "false"); return;

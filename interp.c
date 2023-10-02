@@ -1,7 +1,7 @@
 /*
     module  : interp.c
-    version : 1.1.1.1
-    date    : 09/13/23
+    version : 1.1.1.2
+    date    : 10/02/23
 */
 /* FILE: interp.c */
 
@@ -672,7 +672,8 @@ PRIVATE void take_()
 		  { DMP2 = newnode(DMP1->op,DMP1->u.num,NULL);
 		    DMP3 = DMP2; }
 		else					/* further */
-		  { DMP3->next = newnode(DMP1->op,DMP1->u.num,NULL);
+		  { Node *temp = newnode(DMP1->op,DMP1->u.num,NULL);
+		    DMP3->next = temp;
 		    DMP3 = DMP3->next; }
 		DMP1 = DMP1->next; }
 	    DMP3->next = NULL;
@@ -711,9 +712,10 @@ PRIVATE void concat_()
 			    DMP1->u.num,NULL);
 		    DMP3 = DMP2; }
 		else					/* further */
-		  { DMP3->next =
+		  { Node *temp =
 			newnode(DMP1->op,
 			    DMP1->u.num,NULL);
+		    DMP3->next = temp;
 		    DMP3 = DMP3->next; };
 		DMP1 = DMP1->next; }
 	    DMP3->next = stk->u.lis;
@@ -1124,8 +1126,9 @@ D(		printf("map: "); writefactor(stk); printf("\n"); )
 			newnode(stk->op,stk->u.num,NULL);
 		    DMP3 = DMP2; }
 		else					/* further */
-		  { DMP3->next =
+		  { Node *temp =
 			newnode(stk->op,stk->u.num,NULL);
+		    DMP3->next = temp;
 		    DMP3 = DMP3->next; }
 		DMP1 = DMP1->next; }
 	    stk = newnode(LIST_,DMP2,SAVED3);
@@ -1270,9 +1273,10 @@ D(		printf("filter: "); writefactor(stk); printf("\n"); )
 				DMP1->u.num,NULL);
 			DMP3 = DMP2; }
 		    else {				/* further */
-		      { DMP3->next =
+		      { Node *temp =
 			    newnode(DMP1->op,
 				DMP1->u.num,NULL);
+			DMP3->next = temp;
 			DMP3 = DMP3->next; } } }
 		DMP1 = DMP1->next; }
 	    stk = newnode(LIST_,DMP2,SAVED3);
@@ -1333,9 +1337,10 @@ D(		printf("split: "); writefactor(stk); printf("\n"); )
 				DMP1->u.num,NULL);
 			DMP3 = DMP2; }
 		    else				/* further */
-		      { DMP3->next =
+		      { Node *temp =
 			    newnode(DMP1->op,
 				DMP1->u.num,NULL);
+			DMP3->next = temp;
 			DMP3 = DMP3->next; }
 		else					/* fail */
 		    if (DMP4 == NULL)		/* first */
@@ -1344,9 +1349,10 @@ D(		printf("split: "); writefactor(stk); printf("\n"); )
 				DMP1->u.num,NULL);
 			DMP5 = DMP4; }
 		    else				/* further */
-		      { DMP5->next =
+		      { Node *temp =
 			    newnode(DMP1->op,
 				DMP1->u.num,NULL);
+			DMP5->next = temp;
 			DMP5 = DMP5->next; }
 		DMP1 = DMP1->next; }
 	    stk = newnode(LIST_,DMP2,SAVED3);

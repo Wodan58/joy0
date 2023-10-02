@@ -1,7 +1,7 @@
 /*
     module  : main.c
-    version : 1.1.1.1
-    date    : 09/13/23
+    version : 1.1.1.2
+    date    : 10/02/23
 */
 /* file: main.c */
 
@@ -35,7 +35,7 @@ D(  printf("getsym, new: '%s'\n",id); )
     strcpy(location->name,id);
     location->u.body = NULL; /* may be assigned in definition */
     location->next = hashentry[hashvalue];
-D(  printf("entered %s at %d\n",id,LOC2INT(location)); )
+D(  printf("entered %s at %ld\n",id,LOC2INT(location)); )
     hashentry[hashvalue] = location;
 }
 PUBLIC void lookup()
