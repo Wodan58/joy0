@@ -13,7 +13,7 @@ Some system header files have been added.
 The return value of newnode needs to be captured in a variable.
 This introduces a sequence point, preventing unspecified behaviour.
 TRACING was used to locate the problem, so it was kept in the source code.
-CORRECT_GARBAGE_COLLECTOR prints a runtime error in case of memory overflow.
+CORRECT\_GARBAGE\_COLLECTOR prints a runtime error in case of memory overflow.
 Because the garbage collector uses recursion, a stack overflow is possible.
 
 Warning
@@ -21,17 +21,17 @@ Warning
 
 The source code assumes that sizeof(long) == sizeof(void *).
 
-Installation
-------------
+Build
+-----
 
     make
 
-Testing
--------
+Test
+----
 
     cd test2
     for i in *.joy
     do
-        ../joy <$i >$i.out
+        ../joy $i >$i.out
     done
     grep -l false *.out
