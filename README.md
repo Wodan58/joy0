@@ -10,11 +10,11 @@ Changes
 -------
 
 Some system header files have been added.
+
 The return value of newnode needs to be captured in a variable.
 This introduces a sequence point, preventing unspecified behaviour.
 TRACING was used to locate the problem, so it was kept in the source code.
 CORRECT\_GARBAGE\_COLLECTOR prints a runtime error in case of memory overflow.
-Because the garbage collector uses recursion, a stack overflow is possible.
 
 Warning
 -------

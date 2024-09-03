@@ -1,4 +1,4 @@
-# makefile for Joy 
+# makefile for Joy
 
 HDRS  =  globals.h
 SRCS  =  interp.c  scan.c  utils.c  main.c
