@@ -1,7 +1,7 @@
 /*
     module  : interp.c
-    version : 1.1.1.2
-    date    : 10/02/23
+    version : 1.1.1.3
+    date    : 12/16/24
 */
 /* FILE: interp.c */
 
@@ -13,11 +13,11 @@
 
 /* #define TRACING */
 
-PUBLIC void printnode();		/* file utils.c		*/
+PUBLIC void printnode(Node *p);		/* file utils.c		*/
 
 PRIVATE void helpdetail_();		/* this file		*/
 PRIVATE void make_manual(int latex);
-PUBLIC char * opername();
+PUBLIC char *opername(int o);
 
 #define ONEPARAM(NAME)						\
     if (stk == NULL)						\
@@ -143,15 +143,15 @@ PUBLIC char * opername();
     opername(NODE->op) ) )
 
 /* PUBLIC int clock(); */		/* file time.h		*/
-PUBLIC Node *newnode();			/* file utils.c 	*/
+PUBLIC Node *newnode(Operator o, long l, Node *r);	/* file utils.c */
 PUBLIC void memoryindex_();
-PUBLIC void execerror();		/* file main.c		*/
+PUBLIC void execerror(char *message, char *op);		/* file main.c	*/
 PUBLIC void abortexecution_();
 PUBLIC void getsym();			/* file scan.c		*/
-PUBLIC void doinclude();
+PUBLIC void doinclude(char *filnam);
 PUBLIC void readfactor();		/* file utils.c		*/
-PUBLIC void writefactor();
-PUBLIC void writeterm();
+PUBLIC void writefactor(Node *n);
+PUBLIC void writeterm(Node *n);
 PUBLIC void quit_();
 PUBLIC void gc_();
 /* PUBLIC  int malloc(); */		/* in the library	*/
@@ -466,7 +466,7 @@ PRIVATE void unswons_()
 	default:
 	    BADAGGREGATE("unswons"); }
 }
-PRIVATE int equal_aux(); /* forward */
+PRIVATE int equal_aux(Node *n1, Node *n2); /* forward */
 
 PRIVATE int equal_list_aux(n1,n2)
 Node *n1, *n2;

@@ -1,7 +1,7 @@
 /*
     module  : utils.c
-    version : 1.1.1.2
-    date    : 10/02/23
+    version : 1.1.1.3
+    date    : 12/16/24
 */
 #include <stdio.h>
 #include <time.h>
@@ -11,8 +11,8 @@
 
 /* PUBLIC int clock(); */		/* file time.h		*/
 PUBLIC void getsym();			/* file scan.c		*/
-PUBLIC void error();
-PUBLIC void execerror();		/* file main.c		*/
+PUBLIC void error(char *message);
+PUBLIC void execerror(char *message, char *op);	/* file main.c	*/
 PUBLIC void lookup();
 /* PUBLIC void exit(); */		/* file interp.c	*/
 
@@ -83,7 +83,7 @@ PRIVATE Node *copy(n)
       { printf("%5d -    ",nodescopied); printnode(temp); }
     return temp;
 }
-PUBLIC void writeterm();
+PUBLIC void writeterm(Node *n);
 
 PUBLIC void gc1(mess)
     char * mess;

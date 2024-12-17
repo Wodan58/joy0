@@ -3,12 +3,13 @@
 HDRS  =  globals.h
 SRCS  =  interp.c  scan.c  utils.c  main.c
 OBJS  =  interp.o  scan.o  utils.o  main.o
-CC    =  gcc -O3 -Wall -Wextra -Wpedantic -Werror
+# Use CC environment variable
+CFLAGS = -O3 -Wall -Wextra -Wpedantic -Werror -Wno-char-subscripts -Wno-int-conversion -Wno-old-style-definition
 
-joy:		$(OBJS)
-		$(CC)  $(OBJS)  -o joy
+joy:	$(OBJS)
+	$(CC) $(OBJS) -o $@
 
-$(OBJS):	$(HDRS)
+$(OBJS):$(HDRS)
 
 clean:
-		rm  -f $(OBJS)
+	rm -f $(OBJS)

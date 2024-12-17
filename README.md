@@ -9,7 +9,8 @@ from this one.
 Changes
 -------
 
-Some system header files have been added.
+Some system header files have been added. Functions declarations have been
+ANSIfied, allowing compilation with all warnings turned on.
 
 The return value of newnode needs to be captured in a variable.
 This introduces a sequence point, preventing unspecified behaviour.

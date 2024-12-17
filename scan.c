@@ -1,7 +1,7 @@
 /*
     module  : scan.c
-    version : 1.1.1.1
-    date    : 09/13/23
+    version : 1.1.1.2
+    date    : 12/16/24
 */
 /* FILE : scan.c */
 #include <stdio.h>
@@ -13,7 +13,7 @@
 #define EOLN '\n'
 
 PUBLIC void quit_();			/* file main.c	*/
-PUBLIC void execerror();
+PUBLIC void execerror(char *message, char *op);
 
 static FILE  *infile[INPSTACKMAX];
 static int ilevel;

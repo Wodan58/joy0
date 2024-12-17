@@ -1,7 +1,7 @@
 /*
     module  : main.c
-    version : 1.1.1.2
-    date    : 10/02/23
+    version : 1.1.1.3
+    date    : 12/16/24
 */
 /* file: main.c */
 
@@ -15,16 +15,16 @@
 
 PUBLIC void inilinebuffer();		/* file scan.c		*/
 PUBLIC  int endofbuffer();
-PUBLIC void doinclude();
+PUBLIC void doinclude(char *filnam);
 PUBLIC void getsym();
 PUBLIC void inimem1();			/* file utils.c		*/
 PUBLIC void inimem2();
 PUBLIC void inisymboltable();
 PUBLIC void readterm();
-PUBLIC void writeterm();
-PUBLIC void writefactor();
-PUBLIC void error();
-PUBLIC void exeterm();			/* file interp.c	*/
+PUBLIC void writeterm(Node *n);
+PUBLIC void writefactor(Node *n);
+PUBLIC void error(char *message);
+PUBLIC void exeterm(Node *n);		/* file interp.c	*/
 PUBLIC void abortexecution_();		/* forward */
 
 PUBLIC void enterglobal()
@@ -56,7 +56,7 @@ D(	printf("found %s in local table\n",id); )
     if (location == symtab) /* not found, enter in global */
 	enterglobal();
 }
-PRIVATE void defsequence();		/* forward */
+PRIVATE void defsequence(int hidden);		/* forward */
 
 PRIVATE void definition(hidden)
 int hidden;
